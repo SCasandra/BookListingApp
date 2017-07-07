@@ -226,24 +226,32 @@ public class MainActivity extends AppCompatActivity {
             List<Book> books = new ArrayList<>();
             try {
                 JSONObject root = new JSONObject(bookJSON);
-                JSONArray items = root.getJSONArray("items");
-                if (items.length() > 0) {
-                    for (int i = 0; i < items.length(); i++) {
-                        JSONObject item = items.getJSONObject(i);
-                        JSONObject book = item.getJSONObject("volumeInfo");
-                        String title = book.getString("title");
-                        String author = "";
-                        String description = "-";
-                        try {
-                            author = book.getString("authors");
-                        } catch (JSONException e) {
+                if (root.has("items")) {
+                    JSONArray items = root.getJSONArray("items");
+                    if (items.length() > 0) {
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject item = items.getJSONObject(i);
+                            if (item.has("volumeInfo")) {
+                                JSONObject book = item.getJSONObject("volumeInfo");
+                                String title = "-";
+                                String author = "-";
+                                String description = "-";
+                                if (book.has("title")) {
+                                     title = book.getString("title");
+                                }
+                                if (book.has("authors")) {
+                                    author = book.getString("authors");
+                                } else {
+                                    if (book.has("publisher")) {
+                                        author = book.getString("publisher");
+                                    }
+                                }
+                                if (book.has("description")) {
+                                    description = book.getString("description");
+                                }
+                                books.add(new Book(title, author, description));
+                            }
                         }
-                        try {
-                            author = book.getString("publisher");
-                        } catch (Exception e) {
-                        }
-                        description = book.getString("description");
-                        books.add(new Book(title, author, description));
                     }
                 }
             } catch (JSONException e) {
