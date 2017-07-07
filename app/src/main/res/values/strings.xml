@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BookApp</string>
+    <string name="action_search">search</string>
+    <string name="no_books">No results</string>
+    <string name="no_network">Make sure your wireless is on and connected.</string>
+    <string name="loading_message">Loading data..</string>
+</resources>
